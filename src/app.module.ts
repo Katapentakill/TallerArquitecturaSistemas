@@ -8,6 +8,9 @@ import { Invoice } from './entities/invoice.entity'; // Entidad de facturación 
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { InvoicesService } from './invoices/invoices.service';
+import { InvoicesController } from './invoices/invoices.controller';
+import { InvoicesModule } from './invoices/invoices.module';
 
 /**
  * Módulo principal de la aplicación que configura las conexiones a bases de datos,
@@ -59,9 +62,11 @@ import { MongooseModule } from '@nestjs/mongoose';
     UsersModule,
 
     // Módulo de autenticación (inicio de sesión, manejo de tokens JWT, etc.)
-    AuthModule
+    AuthModule,
+
+    InvoicesModule
   ],
-  controllers: [AppController], // Controlador principal de la aplicación
-  providers: [AppService], // Servicio global para la lógica de negocio general
+  controllers: [AppController, InvoicesController], // Controlador principal de la aplicación
+  providers: [AppService, InvoicesService], // Servicio global para la lógica de negocio general
 })
 export class AppModule {}
