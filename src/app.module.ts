@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { InvoicesService } from './invoices/invoices.service';
 import { InvoicesController } from './invoices/invoices.controller';
 import { InvoicesModule } from './invoices/invoices.module';
+import { VideosModule } from './videos/videos.module';
 
 /**
  * Módulo principal de la aplicación que configura las conexiones a bases de datos,
@@ -65,7 +66,9 @@ import { InvoicesModule } from './invoices/invoices.module';
     AuthModule,
 
     // Módulo de facturación (manejo de facturas, pagos, etc.)
-    InvoicesModule
+    InvoicesModule,
+
+    VideosModule
   ],
   controllers: [AppController], // Controlador principal de la aplicación
   providers: [AppService], // Servicio global para la lógica de negocio general
