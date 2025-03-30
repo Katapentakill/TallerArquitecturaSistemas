@@ -64,9 +64,10 @@ import { InvoicesModule } from './invoices/invoices.module';
     // Módulo de autenticación (inicio de sesión, manejo de tokens JWT, etc.)
     AuthModule,
 
+    // Módulo de facturación (manejo de facturas, pagos, etc.)
     InvoicesModule
   ],
-  controllers: [AppController, InvoicesController], // Controlador principal de la aplicación
-  providers: [AppService, InvoicesService], // Servicio global para la lógica de negocio general
+  controllers: [AppController], // Controlador principal de la aplicación
+  providers: [AppService], // Servicio global para la lógica de negocio general
 })
 export class AppModule {}

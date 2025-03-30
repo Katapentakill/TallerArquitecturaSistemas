@@ -22,13 +22,14 @@ export class InvoicesService {
             const user = await this.userRepository.findOne({ where: { id: parseInt(userid) } });
             if (!user) errors.push('El usuario no existe.');
 
-            if (errors.length > 0) {
-                throw new HttpException({ message: 'Error al registrar factura', errors }, HttpStatus.BAD_REQUEST);
-            }
             // Validar la cantidad de la factura
             const correctAmount = parseFloat(amount);
             if (isNaN(correctAmount) || correctAmount <= 0) {
                 errors.push('El monto debe ser un número positivo.');
+
+            }
+            if (errors.length > 0) {
+                throw new HttpException({ message: 'Error al registrar factura', errors }, HttpStatus.BAD_REQUEST);
             }
             // Crear y guardar la factura
             const userId = parseInt(userid);
@@ -51,7 +52,7 @@ export class InvoicesService {
     async getInvoiceById(id: number): Promise<InvoiceDataDto> {
         try {
             const invoice = await this.invoiceRepository.findOne({ where: { id } });
-            if (!invoice) {
+            if (!invoice || invoice.deletedAt) {
                 throw new HttpException('Factura no encontrada', HttpStatus.NOT_FOUND);
             }
             const invoiceDto = {
@@ -90,6 +91,7 @@ export class InvoicesService {
                 invoice.paidAt = new Date(); // Asignar la fecha actual al campo paidAt
             }
             invoice.status = status;
+            invoice.updatedAt = new Date(); // Asignar la fecha actual al campo updatedAt
             return await this.invoiceRepository.save(invoice);
         } catch (error) {
             throw new HttpException(
@@ -109,6 +111,7 @@ export class InvoicesService {
                 throw new HttpException('No se puede eliminar una factura pagada', HttpStatus.BAD_REQUEST);
             }
             invoice.deletedAt = new Date(); // Asignar la fecha actual al campo deletedAt
+            invoice.updatedAt = new Date(); // Asignar la fecha actual al campo updatedAt
             await this.invoiceRepository.save(invoice);
             return { message: 'Factura eliminada exitosamente' };
         } catch (error) {

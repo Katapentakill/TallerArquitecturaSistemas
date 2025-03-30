@@ -4,15 +4,15 @@ import { CreateInvoiceDto } from '../DTO/createInvoiceDto';
 import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
-@Controller('invoices')
+@Controller('facturas')
 export class InvoicesController {0
     constructor(
         private readonly invoicesService: InvoicesService,
         private readonly jwtService: JwtService
     ) {}
 
-    @Post('facturas')
-    async createInvoice(@Body() req: Request, createInvoiceDto: CreateInvoiceDto, @Res() res: Response) {
+    @Post()
+    async createInvoice(@Req() req: Request, @Body() createInvoiceDto: CreateInvoiceDto, @Res() res: Response) {
         const timestamp = new Date().toISOString();
         
         try {
@@ -44,7 +44,7 @@ export class InvoicesController {0
         }
     }
 
-    @Get('facturas/:id')
+    @Get(':id')
     async getInvoice(@Req() req: Request,  @Param('id') id: number, @Res() res: Response) {
         const timestamp = new Date().toISOString();
         
@@ -54,7 +54,7 @@ export class InvoicesController {0
 
             const result = await this.invoicesService.getInvoiceById(id);
 
-            if (decodedToken.role !== 'Administrador' || decodedToken.sub !== result.userId) {
+            if (decodedToken.role !== 'Administrador' && decodedToken.sub !== result.userId) {
                 throw new HttpException('Acceso denegado. No tienes permitido ver esta factura.', HttpStatus.FORBIDDEN);
             }
             return res.status(HttpStatus.OK).json({
@@ -77,7 +77,7 @@ export class InvoicesController {0
         }
     }
 
-    @Patch('facturas/:id')
+    @Patch(':id')
     async updateInvoice(@Req() req: Request, @Param('id') id: number, @Body() body: any, @Res() res: Response) {
         const timestamp = new Date().toISOString();
         
@@ -110,7 +110,7 @@ export class InvoicesController {0
         }
     }
 
-    @Delete('facturas/:id')
+    @Delete(':id')
     async deleteInvoice(@Req() req: Request, @Param('id') id: number, @Res() res: Response) {
         const timestamp = new Date().toISOString();
 
@@ -143,7 +143,7 @@ export class InvoicesController {0
         }
     }
 
-    @Get('facturas')
+    @Get()
     async getUserInvoices(@Req() req: Request, @Query('status') status: string, @Res() res: Response) {
         const timestamp = new Date().toISOString();
         
