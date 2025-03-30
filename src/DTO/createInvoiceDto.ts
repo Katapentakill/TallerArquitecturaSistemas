@@ -12,9 +12,5 @@ export class CreateInvoiceDto {
   @IsNumber()
   @Min(1)
   amount: string; 
-
-  @IsNotEmpty()
-  @IsDateString()
-  createdAt: string;
   
 }
