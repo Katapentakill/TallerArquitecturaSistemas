@@ -2,13 +2,13 @@ import { IsOptional, MinLength } from 'class-validator';
 export class ChangeVideoDataDto {
     @IsOptional()
     @MinLength(3)
-    title: string;
+    title?: string;
 
     @IsOptional()
     @MinLength(5)
-    description: string;
+    description?: string;
 
     @IsOptional()
     @MinLength(5)
-    genre: string;
+    genre?: string;
 }
