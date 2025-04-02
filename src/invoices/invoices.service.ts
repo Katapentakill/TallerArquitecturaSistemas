@@ -74,7 +74,9 @@ export class InvoicesService {
 
     async updateInvoiceStatus(id: number, status: string): Promise<Invoice> {
         try {
-            const invoice = await this.invoiceRepository.findOne({ where: { id } });
+            const Query: any = { id };
+            Query.deletedAt = null; // Se asegura de que no se obtengan facturas eliminadas
+            const invoice = await this.invoiceRepository.findOne({ where: Query });
             if (!invoice) {
                 throw new HttpException('Factura no encontrada', HttpStatus.NOT_FOUND);
             }
@@ -103,7 +105,9 @@ export class InvoicesService {
 
     async deleteInvoice(id: number): Promise<any> {
         try {
-            const invoice = await this.invoiceRepository.findOne({ where: { id } });
+            const Query: any = { id };
+            Query.deletedAt = null; // Se asegura de que no se obtengan facturas eliminadas
+            const invoice = await this.invoiceRepository.findOne({ where: Query });
             if (!invoice) {
                 throw new HttpException('Factura no encontrada', HttpStatus.NOT_FOUND);
             }
@@ -125,6 +129,7 @@ export class InvoicesService {
     async getUserInvoices(userId: number, isAdmin: boolean, status?: string): Promise<InvoiceDataDto[]> {
         try {
             const Query: any = { userId };
+            Query.deletedAt = null; // Se asegura de que no se obtengan facturas eliminadas
             if (status) {
                 Query.status = status;
             }

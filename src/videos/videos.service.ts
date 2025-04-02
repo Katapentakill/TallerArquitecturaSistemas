@@ -4,12 +4,13 @@ import { Video } from 'src/entities/video.entity';
 import { VideoDataDto } from 'src/DTO/videoDataDto';
 import { ChangeVideoDataDto } from 'src/DTO/changeVideoDataDto';
 import { CreateVideoDto } from 'src/DTO/createVideoDto';
-import { Model, NullExpression } from 'mongoose';
+import { Model, NullExpression, Types } from 'mongoose';
 
 @Injectable()
 export class VideosService {
     constructor(
         @InjectModel(Video.name) private readonly videoModel: Model<Video>,
+
     ) {}
 
     async createVideo(videoData: CreateVideoDto): Promise<Video> {
@@ -28,10 +29,12 @@ export class VideosService {
     }
 
     async getVideoById(id: string): Promise<VideoDataDto> {
+        if(!Types.ObjectId.isValid(id)) throw new NotFoundException('ID no válido');
         const video = await this.videoModel.findById(id).exec();
-        if (!video) throw new NotFoundException('Video con ID ${id} no encontrado');
+        if (!video) throw new NotFoundException('Video no encontrado');
+        if (!video.status) throw new NotFoundException('Video no encontrado');
         return {
-            id: Number(video._id),
+            id: video._id as string,
             title: video.title,
             description: video.description,
             genre: video.genre,
@@ -39,8 +42,10 @@ export class VideosService {
     }
 
     async updateVideoData(id: string, updatedVideo: ChangeVideoDataDto): Promise<ChangeVideoDataDto> {
+        if(!Types.ObjectId.isValid(id)) throw new NotFoundException('ID no válido');
         const video = await this.videoModel.findByIdAndUpdate(id, updatedVideo, { new: true }).exec();
-        if (!video) throw new NotFoundException('Video con ID ${id} no encontrado');
+        if (!video) throw new NotFoundException('Video no encontrado');
+        if (!video.status) throw new NotFoundException('Video no encontrado');
         const updatedVideoData = {
             title: updatedVideo.title ? updatedVideo.title : undefined,
             description: updatedVideo.description ? updatedVideo.description : undefined,
@@ -51,8 +56,24 @@ export class VideosService {
     }
 
     async deleteVideo(id: string): Promise<NullExpression> { 
-        const video = await this.videoModel.findByIdAndUpdate(id, { status: false }, { new: true }).exec();
-        if (!video) throw new NotFoundException('Video con ID ${id} no encontrado');
+        if(!Types.ObjectId.isValid(id)) throw new NotFoundException('ID no válido');
+        const video = await this.videoModel.findByIdAndUpdate(
+            {_id: id, status: true}, { status: false }, { new: true }
+        ).exec();
+        if (!video) throw new NotFoundException('Video no encontrado');
         return null;
+    }
+
+    async getAllVideos(query?: string): Promise<Video[]> {
+        if (query) {
+            return this.videoModel.find({
+                $or: [
+                    { title: { $regex: query, $options: 'i' }, status: true },
+                    { description: { $regex: query, $options: 'i' }, status: true },
+                    { genre: { $regex: query, $options: 'i' }, status: true },
+                ]
+            }).exec();
+        }
+        return this.videoModel.find({ status: true }).exec();
     }
 }

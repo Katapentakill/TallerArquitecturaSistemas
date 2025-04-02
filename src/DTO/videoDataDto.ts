@@ -1,6 +1,6 @@
 
 export class VideoDataDto {
-    id: number;
+    id: string;
     title: string;
     description: string;
     genre: string;
