@@ -8,6 +8,10 @@ import { Invoice } from './entities/invoice.entity'; // Entidad de facturación 
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { InvoicesService } from './invoices/invoices.service';
+import { InvoicesController } from './invoices/invoices.controller';
+import { InvoicesModule } from './invoices/invoices.module';
+import { VideosModule } from './videos/videos.module';
 import { SeedModule } from './scripts/seed.module';
 
 /**
@@ -62,6 +66,10 @@ import { SeedModule } from './scripts/seed.module';
     // Módulo de autenticación (inicio de sesión, manejo de tokens JWT, etc.)
     AuthModule,
 
+    // Módulo de facturación (manejo de facturas, pagos, etc.)
+    InvoicesModule,
+
+    VideosModule,
     SeedModule
   ],
   controllers: [AppController], // Controlador principal de la aplicación

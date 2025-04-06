@@ -36,5 +36,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [UsersController], // Controlador responsable de gestionar las solicitudes HTTP relacionadas con usuarios
   providers: [UsersService], // Servicio que maneja la lógica de negocio relacionada con los usuarios
+  //exports: [JwtModule], // Exporta el módulo JWT para que pueda ser utilizado en otros módulos
 })
 export class UsersModule {}
