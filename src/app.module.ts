@@ -8,6 +8,7 @@ import { Invoice } from './entities/invoice.entity'; // Entidad de facturación 
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SeedModule } from './scripts/seed.module';
 
 /**
  * Módulo principal de la aplicación que configura las conexiones a bases de datos,
@@ -59,7 +60,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     UsersModule,
 
     // Módulo de autenticación (inicio de sesión, manejo de tokens JWT, etc.)
-    AuthModule
+    AuthModule,
+
+    SeedModule
   ],
   controllers: [AppController], // Controlador principal de la aplicación
   providers: [AppService], // Servicio global para la lógica de negocio general
