@@ -30,6 +30,69 @@
 ```bash
 $ npm install
 ```
+## Configuración inicial de las bases de datos
+
+Antes de ejecutar el proyecto, es necesario instalar y configurar las siguientes bases de datos:
+
+- **MariaDB** (para usuarios y facturación)
+- **PostgreSQL** (para autenticación)
+- **MongoDB** (para gestión de videos)
+
+### Opcional pero recomendado:
+- Instala también los **paneles de control** como DBeaver, HeidiSQL, pgAdmin o MongoDB Compass para facilitar la gestión visual de las bases de datos.
+
+### Pasos para la configuración
+
+1. **Inicia los servidores de MariaDB, PostgreSQL y MongoDB.**
+
+2. **Desde la herramienta de query (como pgAdmin, DBeaver o similar), crea las siguientes bases de datos:**
+
+   - Para **MariaDB** puedes usar cualquier nombre, por ejemplo: `users_db`
+   - Para **PostgreSQL** cualquier nombre también, por ejemplo: `auth_db`
+   - Para **MongoDB** no es necesario crear previamente la base de datos (`videos_db` se creará automáticamente al insertar datos)
+
+3. **Asegúrate de recordar el nombre de cada base de datos y la contraseña del usuario.**
+
+   Por defecto, este proyecto utiliza las siguientes credenciales en `app.module.ts`:
+
+   - **MariaDB**
+     - Usuario: `root`
+     - Contraseña: `123`
+     - Base de datos: `users_db`
+
+   - **PostgreSQL**
+     - Usuario: `postgres`
+     - Contraseña: `123`
+     - Base de datos: `auth_db`
+
+   - **MongoDB**
+     - Conexión: `mongodb://localhost:27017/videos_db`
+
+4. **Modificar `AppModule` si cambiaste el nombre o la contraseña.**
+
+   Abre el archivo `src/app.module.ts` y edita las propiedades `username`, `password`, y `database` en las configuraciones de `TypeOrmModule.forRoot(...)` y `MongooseModule.forRoot(...)`.
+
+5. **Listo. Al ejecutar el proyecto por primera vez, las tablas se crearán automáticamente** en cada base de datos correspondiente gracias a la propiedad `synchronize: true`. Esto solo debe usarse durante el desarrollo, no en producción.
+
+## Activar el Seeder
+
+Para ejecutar el Seeder y agregar datos de ejemplo, debes asegurarte de que la variable `environment` esté correctamente configurada.
+
+### ¿Cómo activar el Seeder?
+
+En el archivo `main.ts`, la variable `environment` debe ser `'development'` para que el Seeder se ejecute correctamente.
+
+```typescript
+const environment: string = 'develoment'; // Si se escribe correctamente
+```
+Si no deseas que el Seeder se ejecute siempre que inicies el proyecto, puedes cambiar el valor de la variable `environment` a algo diferente a `'development'`. Esto evitará que el Seeder se ejecute automáticamente.
+
+### Recomendación: Para garantizar que el Seeder funcione correctamente, sigue estos pasos:
+
+1. **Paso 1**: Deja la variable `environment` escrita como `'development'` y corre el proyecto.
+2. **Paso 2**: Detén el proyecto.
+3. **Paso 3**: Cambia la variable `environment` a cualquier otra palabra, por ejemplo, `'production'`.
+4. **Paso 4**: Vuelve a correr el proyecto. El Seeder se ejecutará correctamente solo en el primer paso cuando esté escrito correctamente como `'development'`.
 
 ## Compile and run the project
 
