@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
     MongooseModule.forFeature([{ name: Video.name, schema: VideoSchema }]),
 
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret', // Se recomienda utilizar variables de entorno para mayor seguridad
+      secret: process.env.JWT_SECRET, // Se recomienda utilizar variables de entorno para mayor seguridad
       signOptions: { expiresIn: '60m' }, // El token expira en 60 minutos
     }),
   

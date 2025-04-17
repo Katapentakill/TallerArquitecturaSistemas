@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, HttpStatus, HttpException, Req } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, HttpException, Req, Patch, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from '../DTO/auth.dto';
 import { Response, Request } from 'express';
@@ -51,18 +51,20 @@ export class AuthController {
     }
   }
 
-  /**
-   * Endpoint para cambiar la contraseña de un usuario autenticado.
-   * 
-   * @param req - Objeto de solicitud con el token JWT en los headers.
-   * @param body - Contiene la contraseña actual (`oldPassword`) y la nueva contraseña (`newPassword`).
-   * @param res - Objeto de respuesta HTTP.
-   * @returns Un mensaje de confirmación si el cambio de contraseña es exitoso.
-   */
-  @Post('change-password')
+ /**
+ * Endpoint para cambiar la contraseña de un usuario autenticado.
+ * 
+ * @param req - Objeto de solicitud con el token JWT en los headers.
+ * @param id - ID del usuario enviado en la URL.
+ * @param body - Contiene la contraseña actual (`oldPassword`), nueva (`newPassword`) y confirmación (`confirmPassword`).
+ * @param res - Objeto de respuesta HTTP.
+ * @returns Un mensaje de confirmación si el cambio de contraseña es exitoso.
+ */
+  @Patch(':id')
   async changePassword(
     @Req() req: Request,
-    @Body() body: ChangePasswordDto, // Usamos ChangePasswordDto
+    @Param('id') id: string,
+    @Body() body: ChangePasswordDto,
     @Res() res: Response
   ) {
     const timestamp = new Date().toISOString();
@@ -71,12 +73,23 @@ export class AuthController {
       // Se extrae el token JWT del encabezado de la solicitud
       const token = this.extractToken(req);
 
+      // Se decodifica el token para obtener el ID del usuario autenticado
+      const decoded = this.jwtService.verify(token);
+
+      // Se verifica que el ID del token coincida con el ID en la URL
+      if (decoded.sub !== id) {
+        throw new HttpException(
+          { message: 'No autorizado para cambiar esta contraseña.', errors: [] },
+          HttpStatus.FORBIDDEN
+        );
+      }
+
       // Llamamos al servicio para cambiar la contraseña
       const result = await this.authService.changePassword(
         token,
         body.oldPassword,
         body.newPassword,
-        body.confirmPassword // Enviamos también la confirmación
+        body.confirmPassword
       );
 
       return res.status(HttpStatus.OK).json({
@@ -99,6 +112,7 @@ export class AuthController {
       });
     }
   }
+
 
   /**
    * Extrae y valida el token del encabezado de autorización de la solicitud.

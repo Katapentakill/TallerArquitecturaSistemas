@@ -30,7 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
      * Se utiliza una clave secreta y se define un tiempo de expiración de 60 minutos.
      */
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret', // Se recomienda utilizar variables de entorno para mayor seguridad
+      secret: process.env.JWT_SECRET, // Se recomienda utilizar variables de entorno para mayor seguridad
       signOptions: { expiresIn: '60m' }, // El token expira en 60 minutos
     }),
   ],

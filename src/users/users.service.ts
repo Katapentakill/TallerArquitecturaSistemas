@@ -26,16 +26,18 @@ export class UsersService {
       const { email, name, lastname, password, confirmPassword, role = 'Cliente' } = createUserDto;
       const errors: string[] = [];
   
-      // Verificar si las contraseñas coinciden
+      const allowedRoles = ['Cliente', 'Administrador'];
+      if (!allowedRoles.includes(role)) {
+        errors.push('Rol no válido. Solo se permite Cliente o Administrador.');
+      }
+  
       if (password !== confirmPassword) {
         errors.push('Las contraseñas no coinciden');
       }
   
-      // Verificar si el usuario ya existe en `users`
       const existingUser = await this.userRepository.findOne({ where: { email } });
       if (existingUser) errors.push('El correo ya está registrado.');
   
-      // Verificar si el usuario ya tiene credenciales en `auth_users`
       const existingAuthUser = await this.authUserRepository.findOne({ where: { email } });
       if (existingAuthUser) errors.push('El correo ya tiene credenciales.');
   
@@ -43,25 +45,16 @@ export class UsersService {
         throw new HttpException({ message: 'Error al registrar usuario', errors }, HttpStatus.BAD_REQUEST);
       }
   
-      // Encriptar la contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Crear y guardar el usuario en `users`
       const newUser = this.userRepository.create({ email, name, lastname, role });
       await this.userRepository.save(newUser);
   
-      // Crear y guardar credenciales en `auth_users`
       const newAuthUser = this.authUserRepository.create({ email, password: hashedPassword });
       await this.authUserRepository.save(newAuthUser);
   
-      // Generar el token de autenticación
-      const payload = { email: newUser.email, sub: newUser.id, role: newUser.role };
-      const token = this.jwtService.sign(payload);
+      const userResponse = { ...newUser, password: undefined };
   
-      // Devolver los datos del usuario, sin el hash de la contraseña
-      const userResponse = { ...newUser, password: undefined }; // No devolver la contraseña
-  
-      return { user: userResponse, token };
+      return { user: userResponse };
     } catch (error) {
       throw new HttpException(
         { message: 'Error inesperado en el registro', errors: [error.message] },
@@ -118,7 +111,7 @@ export class UsersService {
   /**
    * Obtiene los datos de un usuario específico (solo para administradores).
    */
-  async getUserByAdmin(userId: number) {
+  async getUserById(userId: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) {
