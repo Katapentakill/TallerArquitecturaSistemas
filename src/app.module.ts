@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity'; // Entidad de usuarios (gestión de perfiles y roles)
-import { AuthUser } from './entities/authUser.entity'; // Entidad de autenticación (manejo de credenciales)
-import { Invoice } from './entities/invoice.entity'; // Entidad de facturación (si se usa MariaDB)
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { User } from './entities/user.entity';
+import { AuthUser } from './entities/authUser.entity';
+import { Invoice } from './entities/invoice.entity';
+
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { InvoicesService } from './invoices/invoices.service';
-import { InvoicesController } from './invoices/invoices.controller';
 import { InvoicesModule } from './invoices/invoices.module';
 import { VideosModule } from './videos/videos.module';
 import { SeedModule } from './scripts/seed.module';
@@ -20,59 +21,48 @@ import { SeedModule } from './scripts/seed.module';
  */
 @Module({
   imports: [
-    /**
-     * Configuración de TypeORM para la base de datos de usuarios en MariaDB.
-     * 
-     * - Almacena la información de los usuarios, incluyendo datos personales y roles.
-     * - También maneja la entidad `Invoice` si se usa facturación.
-     * - Se recomienda **NO** usar `synchronize: true` en producción, ya que puede afectar los datos existentes.
-     */
+    // Cargar las variables de entorno desde .env
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    // Conexión a MariaDB para usuarios e invoices
     TypeOrmModule.forRoot({
-      name: 'userConnection', // Nombre de la conexión para los usuarios
+      name: 'userConnection',
       type: 'mariadb',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '123', // Se recomienda utilizar variables de entorno para mayor seguridad
-      database: 'users_db',
-      entities: [User, Invoice], // Entidades almacenadas en MariaDB
-      synchronize: true, // Solo debe usarse en desarrollo, desactivar en producción
+      host: process.env.DB_USERS_HOST,
+      port: Number(process.env.DB_USERS_PORT),
+      username: process.env.DB_USERS_USERNAME,
+      password: process.env.DB_USERS_PASSWORD,
+      database: process.env.DB_USERS_NAME,
+      entities: [User, Invoice],
+      synchronize: true,
     }),
 
-    /**
-     * Configuración de TypeORM para la base de datos de autenticación en PostgreSQL.
-     * 
-     * - Se usa exclusivamente para el manejo de credenciales y autenticación.
-     * - Almacena las contraseñas encriptadas y datos de login.
-     * - Al igual que la configuración anterior, `synchronize: true` solo debe usarse en desarrollo.
-     */
+    // Conexión a PostgreSQL para autenticación
     TypeOrmModule.forRoot({
-      name: 'authConnection', // Nombre de la conexión para autenticación
+      name: 'authConnection',
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '123', // Se recomienda utilizar variables de entorno para mayor seguridad
-      database: 'auth_db',
-      entities: [AuthUser], // Entidades almacenadas en PostgreSQL
-      synchronize: true, // Solo en desarrollo, deshabilitar en producción
+      host: process.env.DB_AUTH_HOST,
+      port: Number(process.env.DB_AUTH_PORT),
+      username: process.env.DB_AUTH_USERNAME,
+      password: process.env.DB_AUTH_PASSWORD,
+      database: process.env.DB_AUTH_NAME,
+      entities: [AuthUser],
+      synchronize: true,
     }),
 
-    MongooseModule.forRoot('mongodb://localhost:27017/videos_db'),
+    // Conexión a MongoDB
+    MongooseModule.forRoot(process.env.MONGODB_URI!),
 
-    // Módulo de gestión de usuarios (registro, administración de roles, etc.)
+    // Otros módulos de la aplicación
     UsersModule,
-
-    // Módulo de autenticación (inicio de sesión, manejo de tokens JWT, etc.)
     AuthModule,
-
-    // Módulo de facturación (manejo de facturas, pagos, etc.)
     InvoicesModule,
-
     VideosModule,
-    SeedModule
+    SeedModule,
   ],
-  controllers: [AppController], // Controlador principal de la aplicación
-  providers: [AppService], // Servicio global para la lógica de negocio general
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

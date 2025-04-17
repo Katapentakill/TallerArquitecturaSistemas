@@ -53,7 +53,7 @@ export class SeederService {
     const authUsers = users.map(user => {
       return this.authUserRepository.create({
         email: user.email,
-        password: bcrypt.hashSync(faker.internet.password(), 10), // Crear una contraseña cifrada con bcrypt
+        password: bcrypt.hashSync('12345', 10), // Usar una contraseña fija cifrada con bcrypt
       });
     });
 
@@ -106,5 +106,63 @@ export class SeederService {
     await this.videoModel.insertMany(videos);
 
     console.log('Datos de ejemplo insertados correctamente.');
+  }
+
+  async createAdmin() {
+    const plainPassword = faker.internet.password();
+    const email = faker.internet.email();
+
+    const user = this.userRepository.create({
+      name: faker.name.firstName(),
+      lastname: faker.name.lastName(),
+      email,
+      role: 'Administrador',
+      status: true,
+    });
+    await this.userRepository.save(user);
+
+    const authUser = this.authUserRepository.create({
+      email,
+      password: bcrypt.hashSync(plainPassword, 10),
+    });
+    await this.authUserRepository.save(authUser);
+
+    return {
+      success: true,
+      message: 'Administrador creado correctamente',
+      user: {
+        ...user,
+        password: plainPassword,
+      },
+    };
+  }
+
+  async createCliente() {
+    const plainPassword = faker.internet.password();
+    const email = faker.internet.email();
+
+    const user = this.userRepository.create({
+      name: faker.name.firstName(),
+      lastname: faker.name.lastName(),
+      email,
+      role: 'Cliente',
+      status: true,
+    });
+    await this.userRepository.save(user);
+
+    const authUser = this.authUserRepository.create({
+      email,
+      password: bcrypt.hashSync(plainPassword, 10),
+    });
+    await this.authUserRepository.save(authUser);
+
+    return {
+      success: true,
+      message: 'Cliente creado correctamente',
+      user: {
+        ...user,
+        password: plainPassword,
+      },
+    };
   }
 }

@@ -28,7 +28,7 @@ import { JwtModule } from '@nestjs/jwt'; // Módulo de autenticación JWT para l
      * Se utiliza una clave secreta y se define un tiempo de expiración de 1 hora.
      */
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret', // Clave secreta para firmar los tokens
+      secret: process.env.JWT_SECRET, // Clave secreta para firmar los tokens
       signOptions: { expiresIn: '1h' }, // Tiempo de expiración del token
     }),
   ],

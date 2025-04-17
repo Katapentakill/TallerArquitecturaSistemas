@@ -11,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
     TypeOrmModule.forFeature([Invoice, User], 'userConnection'),
 
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret', // Clave secreta para firmar los tokens
+      secret: process.env.JWT_SECRET, // Clave secreta para firmar los tokens
       signOptions: { expiresIn: '1h' }, // Tiempo de expiración del token
     })
   ],

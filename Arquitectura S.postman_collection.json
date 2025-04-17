@@ -10,7 +10,7 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "Login",
+					"name": "Iniciar sesión",
 					"request": {
 						"method": "POST",
 						"header": []
@@ -18,16 +18,23 @@
 					"response": []
 				},
 				{
-					"name": "Change Password",
+					"name": "Actualizar contraseña",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUxLmNvbSIsInN1YiI6MSwicm9sZSI6IkNsaWVudGUiLCJpYXQiOjE3NDI3MDQzOTUsImV4cCI6MTc0MjcwNzk5NX0.3H7RlcMNUr0W8T0C46uPHSpmkC9naPL3Xfu3yoGuDz8",
+									"type": "string"
+								}
+							]
 						},
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n  \"oldPassword\": \"newSecurePassword456\",\r\n  \"newPassword\": \"newSecurePassword456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -35,7 +42,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/login",
+							"raw": "http://localhost:3000/auth/usuarios/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -43,7 +50,8 @@
 							"port": "3000",
 							"path": [
 								"auth",
-								"login"
+								"usuarios",
+								"1"
 							]
 						}
 					},
@@ -55,7 +63,7 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Register",
+					"name": "Crear usuario",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -75,7 +83,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtain Data User One",
+					"name": "Obtener usuario por ID",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -83,7 +91,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtain Data User For Admin",
+					"name": "Listar todos los usuarios",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -91,15 +99,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtain Total Users",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "Update User",
+					"name": "Actualizar usuario",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -119,7 +119,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete User",
+					"name": "Eliminar usuario",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -133,6 +133,30 @@
 							"path": [
 								"users",
 								"{id}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seeder",
+			"item": [
+				{
+					"name": "Seeder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/seed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"seed"
 							]
 						}
 					},

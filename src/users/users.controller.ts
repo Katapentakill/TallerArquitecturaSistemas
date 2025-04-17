@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 /**
  * Controlador de usuarios encargado de gestionar operaciones sobre usuarios.
  */
-@Controller('users')
+@Controller('usuarios')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -17,16 +17,25 @@ export class UsersController {
   /**
    * Endpoint para registrar un nuevo usuario en el sistema.
    */
-  @Post('register')
-  async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  @Post('crear')
+  async register(@Req() req: Request, @Body() createUserDto: CreateUserDto, @Res() res: Response) {
     const timestamp = new Date().toISOString();
 
     try {
+      const token = this.extractToken(req);
+      const decodedToken = this.jwtService.verify(token);
+
+      // Validar que solo administradores puedan crear usuarios
+      if (decodedToken.role !== 'Administrador') {
+        throw new HttpException('Acceso denegado. Solo los administradores pueden crear usuarios.', HttpStatus.FORBIDDEN);
+      }
+
       const result = await this.usersService.register(createUserDto);
+
       return res.status(HttpStatus.CREATED).json({
         success: true,
         message: 'Usuario registrado con éxito',
-        data: { user: result },  // Aquí retornamos el usuario registrado, sin el hash de la contraseña
+        data: result,
         code: HttpStatus.CREATED,
         timestamp,
         errors: [],
@@ -85,17 +94,52 @@ export class UsersController {
    }
 
   /**
-   * Endpoint para que un usuario autenticado actualice sus propios datos.
-   */
-  @Patch('update')
-  async updateUser(@Req() req: Request, @Body() body: { email?: string; name?: string; lastname?: string }, @Res() res: Response) {
+ * Endpoint para que un usuario autenticado actualice sus propios datos.
+ * 
+ * @param req - Objeto de solicitud con el token JWT en los headers.
+ * @param id - ID del usuario enviado en la URL.
+ * @param body - Objeto con los campos opcionales: `email`, `name`, `lastname`.
+ * @param res - Objeto de respuesta HTTP.
+ * @returns Los datos actualizados del usuario.
+ */
+  @Patch(':id')
+  async updateUser(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() body: { email?: string; name?: string; lastname?: string; password?: string },
+    @Res() res: Response
+  ) {
     const timestamp = new Date().toISOString();
-
+  
     try {
       const token = this.extractToken(req);
       const decodedToken = this.jwtService.verify(token);
-      const updatedUser = await this.usersService.updateUser(decodedToken.sub, body);
-
+  
+      const idAsNumber = parseInt(id, 10);
+  
+      if (isNaN(idAsNumber)) {
+        throw new HttpException(
+          { message: 'ID inválido.', errors: [] },
+          HttpStatus.BAD_REQUEST
+        );
+      }
+  
+      if (decodedToken.sub !== idAsNumber) {
+        throw new HttpException(
+          { message: 'No autorizado para actualizar este usuario.', errors: [] },
+          HttpStatus.FORBIDDEN
+        );
+      }
+  
+      if ('password' in body) {
+        throw new HttpException(
+          { message: 'La contraseña no se puede modificar desde este endpoint.', errors: [] },
+          HttpStatus.BAD_REQUEST
+        );
+      }
+  
+      const updatedUser = await this.usersService.updateUser(idAsNumber, body);
+  
       return res.status(HttpStatus.OK).json({
         success: true,
         message: 'Usuario actualizado con éxito',
@@ -107,7 +151,7 @@ export class UsersController {
     } catch (error) {
       return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({
         success: false,
-        message: error.message || 'Error al actualizar el usuario',
+        message: error.response?.message || error.message || 'Error al actualizar el usuario',
         data: null,
         code: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
         timestamp,
@@ -116,40 +160,9 @@ export class UsersController {
     }
   }
 
-  /**
-   * Endpoint para consultar la cuenta del usuario autenticado.
-   */
-  @Get('profile')
-  async getUserProfile(@Req() req: Request, @Res() res: Response) {
-    const timestamp = new Date().toISOString();
-
-    try {
-      const token = this.extractToken(req);
-      const decodedToken = this.jwtService.verify(token);
-      const userProfile = await this.usersService.getUserProfile(decodedToken.sub);
-
-      return res.status(HttpStatus.OK).json({
-        success: true,
-        message: 'Perfil del usuario obtenido con éxito',
-        data: userProfile,
-        code: HttpStatus.OK,
-        timestamp,
-        errors: []
-      });
-    } catch (error) {
-      return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: error.message || 'Error al obtener el perfil del usuario',
-        data: null,
-        code: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-        timestamp,
-        errors: error.response?.errors || [error.message || 'Ocurrió un error']
-      });
-    }
-  }
 
   /**
-   * Endpoint para que un Administrador consulte los datos de cualquier usuario.
+   * Endpoint para que se consulte los datos del usuario.
    */
   @Get(':id')
   async getUserByAdmin(@Req() req: Request, @Param('id') id: number, @Res() res: Response) {
@@ -158,12 +171,15 @@ export class UsersController {
     try {
       const token = this.extractToken(req);
       const decodedToken = this.jwtService.verify(token);
+      const requesterId = Number(decodedToken.sub); // ID del usuario que hace la petición
+      const targetId = Number(id); // ID que se quiere consultar
 
-      if (decodedToken.role !== 'Administrador') {
-        throw new HttpException('Acceso denegado. Solo Administradores pueden consultar usuarios.', HttpStatus.FORBIDDEN);
+      // Si no es admin, solo puede consultar su propio ID
+      if (decodedToken.role !== 'Administrador' && requesterId !== targetId) {
+        throw new HttpException('Acceso denegado. Solo puedes consultar tus propios datos.', HttpStatus.FORBIDDEN);
       }
 
-      const userProfile = await this.usersService.getUserByAdmin(id);
+      const userProfile = await this.usersService.getUserById(targetId);
       return res.status(HttpStatus.OK).json({
         success: true,
         message: 'Datos del usuario obtenidos con éxito',
