@@ -35,7 +35,7 @@ import { SeedModule } from './scripts/seed.module';
       username: process.env.DB_USERS_USERNAME,
       password: process.env.DB_USERS_PASSWORD,
       database: process.env.DB_USERS_NAME,
-      entities: [User, Invoice],
+      entities: [User],
       synchronize: true,
     }),
 
@@ -49,6 +49,19 @@ import { SeedModule } from './scripts/seed.module';
       password: process.env.DB_AUTH_PASSWORD,
       database: process.env.DB_AUTH_NAME,
       entities: [AuthUser],
+      synchronize: true,
+    }),
+
+    // Conexión a MariaDB para invoices
+    TypeOrmModule.forRoot({
+      name: 'invoiceConnection',
+      type: 'mariadb',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [Invoice],
       synchronize: true,
     }),
 

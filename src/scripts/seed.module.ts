@@ -10,8 +10,9 @@ import { SeedController } from './seed.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Invoice], 'userConnection'),
+    TypeOrmModule.forFeature([User], 'userConnection'),
     TypeOrmModule.forFeature([AuthUser], 'authConnection'),
+    TypeOrmModule.forFeature([Invoice], 'invoiceConnection'),
     MongooseModule.forFeature([{ name: Video.name, schema: VideoSchema }]),
   ],
   providers: [SeederService],

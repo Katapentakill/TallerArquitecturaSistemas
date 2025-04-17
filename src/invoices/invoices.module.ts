@@ -8,7 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Invoice, User], 'userConnection'),
+    TypeOrmModule.forFeature([User], 'userConnection'),
+    TypeOrmModule.forFeature([Invoice], 'invoiceConnection'),
 
     JwtModule.register({
       secret: process.env.JWT_SECRET, // Clave secreta para firmar los tokens

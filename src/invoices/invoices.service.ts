@@ -9,7 +9,7 @@ import { InvoiceDataDto } from 'src/DTO/InvoiceDataDto';
 @Injectable()
 export class InvoicesService {
     constructor(
-        @InjectRepository(Invoice, 'userConnection') private invoiceRepository: Repository<Invoice>,
+        @InjectRepository(Invoice, 'invoiceConnection') private invoiceRepository: Repository<Invoice>,
         @InjectRepository(User, 'userConnection') private userRepository: Repository<User>
     ) {}
 
