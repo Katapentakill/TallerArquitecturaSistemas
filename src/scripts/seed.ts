@@ -14,7 +14,7 @@ import { Video } from '../entities/video.entity';  // Esquema de Video para Mong
 export class SeederService {
   constructor(
     @InjectRepository(User, 'userConnection') private userRepository: Repository<User>,
-    @InjectRepository(Invoice, 'userConnection') private invoiceRepository: Repository<Invoice>,
+    @InjectRepository(Invoice, 'invoiceConnection') private invoiceRepository: Repository<Invoice>,
     @InjectRepository(AuthUser, 'authConnection') private authUserRepository: Repository<AuthUser>,
     @InjectModel(Video.name) private videoModel: Model<Video>,  // Inyectamos el modelo Video para MongoDB
   ) {}
