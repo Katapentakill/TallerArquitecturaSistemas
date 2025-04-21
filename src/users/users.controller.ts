@@ -15,42 +15,51 @@ export class UsersController {
   ) {}
 
   /**
-   * Endpoint para registrar un nuevo usuario en el sistema.
-   */
-  @Post('crear')
-  async register(@Req() req: Request, @Body() createUserDto: CreateUserDto, @Res() res: Response) {
-    const timestamp = new Date().toISOString();
+ * Endpoint para registrar un nuevo usuario en el sistema.
+ * - Público para registrar usuarios Cliente.
+ * - Requiere token de administrador para registrar usuarios Administrador.
+ */
+@Post('crear')
+async register(@Req() req: Request, @Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  const timestamp = new Date().toISOString();
 
-    try {
+  try {
+    const { role = 'Cliente' } = createUserDto;
+
+    if (role === 'Administrador') {
+      // Se requiere token si se quiere crear un administrador
       const token = this.extractToken(req);
       const decodedToken = this.jwtService.verify(token);
 
-      // Validar que solo administradores puedan crear usuarios
       if (decodedToken.role !== 'Administrador') {
-        throw new HttpException('Acceso denegado. Solo los administradores pueden crear usuarios.', HttpStatus.FORBIDDEN);
+        throw new HttpException(
+          'Acceso denegado. Solo los administradores pueden crear usuarios con rol Administrador.',
+          HttpStatus.FORBIDDEN
+        );
       }
-
-      const result = await this.usersService.register(createUserDto);
-
-      return res.status(HttpStatus.CREATED).json({
-        success: true,
-        message: 'Usuario registrado con éxito',
-        data: result,
-        code: HttpStatus.CREATED,
-        timestamp,
-        errors: [],
-      });
-    } catch (error) {
-      return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: error.message || 'Error al registrar el usuario',
-        data: null,
-        code: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-        timestamp,
-        errors: error.response?.errors || [error.message || 'Ocurrió un error'],
-      });
     }
+
+    const result = await this.usersService.register(createUserDto);
+
+    return res.status(HttpStatus.CREATED).json({
+      success: true,
+      message: 'Usuario registrado con éxito',
+      data: result,
+      code: HttpStatus.CREATED,
+      timestamp,
+      errors: [],
+    });
+  } catch (error) {
+    return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message || 'Error al registrar el usuario',
+      data: null,
+      code: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      timestamp,
+      errors: error.response?.errors || [error.message || 'Ocurrió un error'],
+    });
   }
+}
 
    /**
    * Endpoint para eliminar un usuario (soft delete).

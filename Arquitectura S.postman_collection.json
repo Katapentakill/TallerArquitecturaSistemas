@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "8d27541c-f667-4aef-98c1-f3732c7b8280",
+		"_postman_id": "5717da91-2b05-4d09-9394-59d1a7870310",
 		"name": "Arquitectura S",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27393212"
+		"_exporter_id": "33696577",
+		"_collection_link": "https://tapiateam.postman.co/workspace/TapiaTeam-Workspace~9f285a7f-e69d-4281-8344-6cdf5fd62c42/collection/33696577-5717da91-2b05-4d09-9394-59d1a7870310?action=share&source=collection_link&creator=33696577"
 	},
 	"item": [
 		{
@@ -30,12 +31,10 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/login",
-							"protocol": "http",
+							"raw": "{{base_url}}/auth/login",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"login"
@@ -61,7 +60,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"oldPassword\": \"newSecurePassword456\",\r\n  \"newPassword\": \"newSecurePassword456\"\r\n}",
+							"raw": "{\r\n  \"oldPassword\": \"newSecurePassword456\",\r\n  \"newPassword\": \"newSecurePassword456\",\r\n  \"confirmPassword\": \"newSecurePassword456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -69,12 +68,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/usuarios/1",
-							"protocol": "http",
+							"raw": "{{base_url}}/auth/usuarios/1",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"usuarios",
@@ -95,47 +92,19 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "name",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "lastname",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "confirmPassword",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "role",
-									"value": "",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Juan\",\r\n  \"lastname\": \"Pérez\",\r\n  \"email\": \"juan@example.com\",\r\n  \"password\": \"123456\",\r\n  \"confirmPassword\": \"123456\",\r\n  \"role\": \"Cliente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/usuarios/crear",
-							"protocol": "http",
+							"raw": "{{base_url}}/usuarios/crear",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"usuarios",
 								"crear"
@@ -150,12 +119,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/usuarios/5",
-							"protocol": "http",
+							"raw": "{{base_url}}/usuarios/5",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"usuarios",
 								"5"
@@ -180,12 +147,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/usuarios?email=&name&lastname",
-							"protocol": "http",
+							"raw": "{{base_url}}/usuarios?email=&name&lastname",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"usuarios"
 							],
@@ -248,12 +213,10 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/usuarios/5",
-							"protocol": "http",
+							"raw": "{{base_url}}/usuarios/5",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"usuarios",
 								"5"
@@ -268,12 +231,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/usuarios/5",
-							"protocol": "http",
+							"raw": "{{base_url}}/usuarios/5",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"usuarios",
 								"5"
@@ -293,12 +254,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/facturas",
-							"protocol": "http",
+							"raw": "{{base_url}}/facturas",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"facturas"
 							]
@@ -310,25 +269,52 @@
 					"name": "Buscar Factura por ID",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/facturas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"facturas",
+								"1"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Cambiar Estado Factura",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Pagado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3000/facturas/2",
-							"protocol": "http",
+							"raw": "{{base_url}}/facturas/1",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"facturas",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -340,12 +326,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/facturas/3",
-							"protocol": "http",
+							"raw": "{{base_url}}/facturas/3",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"facturas",
 								"3"
@@ -360,12 +344,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/facturas?status=",
-							"protocol": "http",
+							"raw": "{{base_url}}/facturas?status=",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"facturas"
 							],
@@ -390,12 +372,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/videos",
-							"protocol": "http",
+							"raw": "{{base_url}}/videos",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"videos"
 							]
@@ -409,12 +389,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/videos/67ec17bbc21151d3d1a66c6b",
-							"protocol": "http",
+							"raw": "{{base_url}}/videos/67ec17bbc21151d3d1a66c6b",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"videos",
 								"67ec17bbc21151d3d1a66c6b"
@@ -429,12 +407,10 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/videos/67ec17bbc21151d3d1a66c6b",
-							"protocol": "http",
+							"raw": "{{base_url}}/videos/67ec17bbc21151d3d1a66c6b",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"videos",
 								"67ec17bbc21151d3d1a66c6b"
@@ -449,12 +425,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/videos/67ed5e94fcd5ef541f38475f",
-							"protocol": "http",
+							"raw": "{{base_url}}/videos/67ed5e94fcd5ef541f38475f",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"videos",
 								"67ed5e94fcd5ef541f38475f"
@@ -469,12 +443,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/videos",
-							"protocol": "http",
+							"raw": "{{base_url}}/videos",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"videos"
 							]
@@ -493,14 +465,407 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/seed",
-							"protocol": "http",
+							"raw": "{{base_url}}/seed",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
 								"seed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seed Cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/seed/cliente",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"seed",
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seed Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/seed/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"seed",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujo1",
+			"item": [
+				{
+					"name": "Obtener el listado de todos los videos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let videos = response.data; // aquí sí obtenemos el array de videos\r",
+									"\r",
+									"if (videos.length > 0) {\r",
+									"  pm.environment.set(\"video_id\", videos[0]._id);\r",
+									"  console.log(\"Video ID guardado:\", videos[0]._id);\r",
+									"} else {\r",
+									"  console.warn(\"No se encontraron videos.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/videos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"videos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar un nuevo usuario de rol cliente",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rand = Math.floor(Math.random() * 10000);\r",
+									"let email = `cliente${rand}@test.com`;\r",
+									"\r",
+									"pm.environment.set(\"randomInt\", rand);\r",
+									"pm.environment.set(\"email_cliente\", email);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNlcmVuYV9TdGllZGVtYW5uQHlhaG9vLmNvbSIsInN1YiI6MTExLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsImlhdCI6MTc0NDYzNzM1MSwiZXhwIjoxNzQ0NjQwOTUxfQ.GHlTBjs9gTVl9e2Hs1q7kism1lbp-C0TREk8FH8Bzp0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Cliente\",\r\n  \"lastname\": \"Postman\",\r\n  \"email\": \"cliente{{randomInt}}@test.com\",\r\n  \"password\": \"{{password}}\",\r\n  \"confirmPassword\": \"{{password}}\",\r\n  \"role\": \"Cliente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/crear",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "iniciar sesión con el usuario creado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let token = pm.response.json().data.token;\r",
+									"pm.environment.set(\"token_cliente\", token);\r",
+									"console.log(\"Token del cliente guardado:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email_cliente}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener un único vídeo por su ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_cliente}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/videos/{{video_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"videos",
+								"{{video_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujo2",
+			"item": [
+				{
+					"name": "Seed For Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let admin = response.user;\r",
+									"\r",
+									"pm.environment.set(\"email_admin\", admin.email);\r",
+									"pm.environment.set(\"password_admin\", admin.password);\r",
+									"\r",
+									"console.log(\"Email del admin:\", admin.email);\r",
+									"console.log(\"Password del admin:\", admin.password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/seed/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"seed",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar sesión con usuario administrador",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let token = pm.response.json().data.token;\r",
+									"pm.environment.set(\"token_admin\", token);\r",
+									"console.log(\"Token del admin guardado:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email_admin}}\",\r\n  \"password\": \"{{password_admin}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener todas las facturas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let facturas = response.data.invoices;\r",
+									"\r",
+									"if (facturas.length > 0) {\r",
+									"  pm.environment.set(\"factura_id\", facturas[0].id);\r",
+									"  console.log(\"Factura ID guardada:\", facturas[0].id);\r",
+									"} else {\r",
+									"  console.warn(\"No se encontraron facturas.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/facturas?status=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"facturas"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "marcar una factura como pagada",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Pagado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/facturas/{{factura_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"facturas",
+								"{{factura_id}}"
 							]
 						}
 					},
