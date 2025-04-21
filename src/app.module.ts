@@ -43,13 +43,13 @@ import { SeedModule } from './scripts/seed.module';
     TypeOrmModule.forRoot({
       name: 'authConnection',
       type: 'postgres',
-      host: process.env.DB_AUTH_HOST,
-      port: Number(process.env.DB_AUTH_PORT),
-      username: process.env.DB_AUTH_USERNAME,
-      password: process.env.DB_AUTH_PASSWORD,
-      database: process.env.DB_AUTH_NAME,
-      entities: [AuthUser],
-      synchronize: true,
+      host: process.env.DB_AUTH_HOST, // Utiliza el nuevo host del pooler
+      port: Number(process.env.DB_AUTH_PORT), // El puerto sigue siendo 5432
+      username: process.env.DB_AUTH_USERNAME, // El nuevo nombre de usuario
+      password: process.env.DB_AUTH_PASSWORD, // Tu contraseña
+      database: process.env.DB_AUTH_NAME, // El nombre de la base de datos
+      entities: [AuthUser], // Asegúrate de incluir las entidades que necesitas
+      synchronize: true, // Usualmente en desarrollo, evita usar en producción
     }),
 
     // Conexión a MariaDB para invoices
