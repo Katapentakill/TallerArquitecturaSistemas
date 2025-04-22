@@ -76,8 +76,12 @@ export class AuthController {
       // Se decodifica el token para obtener el ID del usuario autenticado
       const decoded = this.jwtService.verify(token);
 
-      // Se verifica que el ID del token coincida con el ID en la URL
-      if (decoded.sub !== id) {
+      // Verifica el valor del ID en el token y el ID de la URL
+      console.log('ID del token (sub):', decoded.sub);  // Ver el valor del ID en el token
+      console.log('ID de la URL:', id);  // Ver el valor del ID en la URL
+
+      // Se verifica que el ID del token coincida con el ID en la URL (comparando ambos como strings)
+      if (String(decoded.sub) !== String(id)) {
         throw new HttpException(
           { message: 'No autorizado para cambiar esta contraseña.', errors: [] },
           HttpStatus.FORBIDDEN
