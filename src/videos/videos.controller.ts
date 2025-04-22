@@ -117,18 +117,28 @@ export class VideosController {
     }
 
     @Delete(':id')
-    async deleteVideo(@Req() req: Request, @Param('id') id: string, @Res() res: Response): Promise <null> {
+    async deleteVideo(@Req() req: Request, @Param('id') id: string, @Res() res: Response) {
         const timestamp = new Date().toISOString();
 
         try {
+            console.log('ID del video a eliminar:', id); // Ver el ID del video a eliminar
             const token = this.extractToken(req);
             const decodedToken = this.jwtService.verify(token);
 
             if(decodedToken.role !== 'Administrador') {
                 throw new HttpException('Acceso denegado. Solo los administradores pueden eliminar videos.', HttpStatus.FORBIDDEN);
             }
+            console.log('Token decodificado:', decodedToken); // Ver el token decodificado
 
-            return this.videosService.deleteVideo(id);
+            this.videosService.deleteVideo(id);
+            return res.status(HttpStatus.OK).json({
+                success: true,
+                message: 'Video eliminado con éxito',
+                data: null,
+                code: HttpStatus.OK,
+                timestamp,
+                errors: []
+            });
         } catch (error) { 
             throw new HttpException({
                 success: false,

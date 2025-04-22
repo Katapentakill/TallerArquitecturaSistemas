@@ -55,13 +55,13 @@ export class VideosService {
         return updatedVideoData;
     }
 
-    async deleteVideo(id: string): Promise<NullExpression> { 
+    async deleteVideo(id: string): Promise<void> { 
         if(!Types.ObjectId.isValid(id)) throw new NotFoundException('ID no válido');
         const video = await this.videoModel.findByIdAndUpdate(
             {_id: id, status: true}, { status: false }, { new: true }
         ).exec();
         if (!video) throw new NotFoundException('Video no encontrado');
-        return null;
+        return;
     }
 
     async getAllVideos(query?: string): Promise<Video[]> {
