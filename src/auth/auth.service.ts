@@ -69,7 +69,7 @@ export class AuthService {
     }
   }
 
-  /**
+    /**
    * Método para cambiar la contraseña de un usuario autenticado.
    * 
    * @param token - Token de autenticación del usuario.
@@ -82,26 +82,26 @@ export class AuthService {
     try {
       const decoded = this.jwtService.verify(token);
       const email = decoded.email;
-  
+
       const authUser = await this.authUserRepository.findOne({ where: { email } });
       if (!authUser) {
         throw new HttpException({ message: 'Usuario no encontrado.', errors: [] }, HttpStatus.NOT_FOUND);
       }
-  
+
       // Verificar que las contraseñas coinciden
       if (newPassword !== confirmPassword) {
         throw new HttpException({ message: 'Las contraseñas nuevas no coinciden.', errors: [] }, HttpStatus.BAD_REQUEST);
       }
-  
+
       const isPasswordValid = await bcrypt.compare(oldPassword, authUser.password);
       if (!isPasswordValid) {
         throw new HttpException({ message: 'La contraseña actual es incorrecta.', errors: [] }, HttpStatus.UNAUTHORIZED);
       }
-  
+
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
       authUser.password = hashedNewPassword;
       await this.authUserRepository.save(authUser);
-  
+
       return { message: 'Contraseña actualizada con éxito.' };
     } catch (error) {
       throw new HttpException(
