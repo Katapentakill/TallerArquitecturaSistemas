@@ -48,8 +48,38 @@ Solicitar los valores a: alexander.tapia@alumnos.ucn.cl o nicolas.tapia02@alumno
 Ejemplo de `.env`:
 
 ```bash
-DATABASE_URL=tu_url_de_base_de_datos
+# Puerto en el que se ejecutará el servidor
+PORT=3000
+
+# Conexión MariaDB (users_db)
+DB_USERS_HOST=tu_host
+DB_USERS_PORT=tu_puerto
+DB_USERS_USERNAME=tu_usuario
+DB_USERS_PASSWORD=tu_contraseña
+DB_USERS_NAME=tu_base_de_datos
+
+# Conexión PostgreSQL (auth_db)
+DB_AUTH_HOST=tu_host
+DB_AUTH_PORT=tu_puerto
+DB_AUTH_USERNAME=tu_usuario
+DB_AUTH_PASSWORD=tu_contraseña
+DB_AUTH_NAME=tu_base_de_datos
+
+# Conexión MariaDB (invoice_db)
+DB_HOST=tu_host
+DB_PORT=tu_puerto
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_NAME=tu_base_de_datos
+
+# Conexión MongoDB (videos_db)
+MONGODB_URI=tu_uri_de_mongodb
+
+# Clave secreta para JWT
 JWT_SECRET=tu_clave_secreta
+
+# Variable de test para verificar funcionamiento de dotenv
+TEST=tu_variable_de_test
 ```
 
 ### Ejecutar en Modo Desarrollo
