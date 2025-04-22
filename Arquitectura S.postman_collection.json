@@ -3,8 +3,8 @@
 		"_postman_id": "5717da91-2b05-4d09-9394-59d1a7870310",
 		"name": "Arquitectura S",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33696577",
-		"_collection_link": "https://tapiateam.postman.co/workspace/TapiaTeam-Workspace~9f285a7f-e69d-4281-8344-6cdf5fd62c42/collection/33696577-5717da91-2b05-4d09-9394-59d1a7870310?action=share&source=collection_link&creator=33696577"
+		"_exporter_id": "27393212",
+		"_collection_link": "https://tapiateam.postman.co/workspace/TapiaTeam-Workspace~9f285a7f-e69d-4281-8344-6cdf5fd62c42/collection/33696577-5717da91-2b05-4d09-9394-59d1a7870310?action=share&source=collection_link&creator=27393212"
 	},
 	"item": [
 		{
@@ -12,6 +12,18 @@
 			"item": [
 				{
 					"name": "Iniciar Sesión",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -20,12 +32,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "Willard_Frami@yahoo.com",
+									"value": "juan@example.cl",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "iWenC5mVGgY4Itk",
+									"value": "123456",
 									"type": "text"
 								}
 							]
@@ -68,13 +80,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/auth/usuarios/1",
+							"raw": "{{base_url}}/auth/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"auth",
-								"usuarios",
 								"1"
 							]
 						}
@@ -88,12 +99,24 @@
 			"item": [
 				{
 					"name": "Crear usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Juan\",\r\n  \"lastname\": \"Pérez\",\r\n  \"email\": \"juan@example.com\",\r\n  \"password\": \"123456\",\r\n  \"confirmPassword\": \"123456\",\r\n  \"role\": \"Cliente\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Juan\",\r\n  \"lastname\": \"Pérez\",\r\n  \"email\": \"juan@example.cl\",\r\n  \"password\": \"123456\",\r\n  \"confirmPassword\": \"123456\",\r\n  \"role\": \"Cliente\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -116,16 +139,26 @@
 				{
 					"name": "Obtener usuario por ID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/usuarios/5",
+							"raw": "{{base_url}}/usuarios/{{user_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"usuarios",
-								"5"
+								"{{user_id}}"
 							]
 						}
 					},
@@ -139,7 +172,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGxhcmRfRnJhbWlAeWFob28uY29tIiwic3ViIjoxNTUsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzQ0ODg0NDE5LCJleHAiOjE3NDQ4ODgwMTl9.ZUXrpShpj6Gf6aZgO2NV-NIdMcc2Asf5sNhsaaS3128",
+									"value": "{{token_admin}}",
 									"type": "string"
 								}
 							]
@@ -180,7 +213,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGxhcmRfRnJhbWlAeWFob28uY29tIiwic3ViIjoxNTUsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzQ0ODg0NDE5LCJleHAiOjE3NDQ4ODgwMTl9.ZUXrpShpj6Gf6aZgO2NV-NIdMcc2Asf5sNhsaaS3128",
+									"value": "{{token_cliente}}",
 									"type": "string"
 								}
 							]
@@ -193,7 +226,8 @@
 								{
 									"key": "email",
 									"value": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "name",
@@ -203,23 +237,25 @@
 								{
 									"key": "lastname",
 									"value": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/usuarios/5",
+							"raw": "{{base_url}}/usuarios/{{user_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"usuarios",
-								"5"
+								"{{user_id}}"
 							]
 						}
 					},
@@ -228,16 +264,26 @@
 				{
 					"name": "Eliminar usuario",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/usuarios/5",
+							"raw": "{{base_url}}/usuarios/{{user_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"usuarios",
-								"5"
+								"{{user_id}}"
 							]
 						}
 					},
@@ -251,8 +297,27 @@
 				{
 					"name": "Crear Factura",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\": \"{{user_id}}\",\r\n    \"status\": \"Pendiente\",\r\n    \"amount\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{base_url}}/facturas",
 							"host": [
@@ -268,6 +333,16 @@
 				{
 					"name": "Buscar Factura por ID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -323,6 +398,16 @@
 				{
 					"name": "Eliminar Factura",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -341,6 +426,16 @@
 				{
 					"name": "Buscar Factura de Usuarios",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -368,9 +463,43 @@
 			"item": [
 				{
 					"name": "Crear Video",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let video = response.data;\r",
+									"\r",
+									"pm.environment.set(\"video_id\", video._id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Video 123\",\r\n    \"description\": \"description\",\r\n    \"genre\": \"Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{base_url}}/videos",
 							"host": [
@@ -386,16 +515,26 @@
 				{
 					"name": "Buscar Video por ID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/videos/67ec17bbc21151d3d1a66c6b",
+							"raw": "{{base_url}}/videos/{{video_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"videos",
-								"67ec17bbc21151d3d1a66c6b"
+								"{{video_id}}"
 							]
 						}
 					},
@@ -403,17 +542,39 @@
 				},
 				{
 					"name": "Editar Video",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "PUT",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    //\"title\": \"Cambiado\",\r\n    \"description\": \"Descripcion 1234\",\r\n    \"genre\": \"Otros\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/videos/67ec17bbc21151d3d1a66c6b",
+							"raw": "{{base_url}}/videos/{{video_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"videos",
-								"67ec17bbc21151d3d1a66c6b"
+								"{{video_id}}"
 							]
 						}
 					},
@@ -422,16 +583,26 @@
 				{
 					"name": "Eliminar Video",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/videos/67ed5e94fcd5ef541f38475f",
+							"raw": "{{base_url}}/videos/{{video_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"videos",
-								"67ed5e94fcd5ef541f38475f"
+								"{{video_id}}"
 							]
 						}
 					},
@@ -754,9 +925,26 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -866,6 +1054,329 @@
 							"path": [
 								"facturas",
 								"{{factura_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujo3",
+			"item": [
+				{
+					"name": "Seed For Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let admin = response.user;\r",
+									"\r",
+									"pm.environment.set(\"email_admin\", admin.email);\r",
+									"pm.environment.set(\"password_admin\", admin.password);\r",
+									"\r",
+									"console.log(\"Email del admin:\", admin.email);\r",
+									"console.log(\"Password del admin:\", admin.password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/seed/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"seed",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar Sesión Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let token = pm.response.json().data.token;\r",
+									"pm.environment.set(\"token_admin\", token);\r",
+									"console.log(\"Token del admin guardado:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email_admin}}\",\r\n  \"password\": \"{{password_admin}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Conseguir todos los usuarios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let users = response.data.users;\r",
+									"\r",
+									"if (users.length > 0) {\r",
+									"  pm.environment.set(\"user_id\", users[0].id);\r",
+									"  console.log(\"ID Usuario guardada:\", users[0].id);\r",
+									"} else {\r",
+									"  console.warn(\"No se encontraron usuarios.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/usuarios?email=&name&lastname",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": ""
+								},
+								{
+									"key": "name",
+									"value": null
+								},
+								{
+									"key": "lastname",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar usuario seleccionado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/usuarios/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujo4",
+			"item": [
+				{
+					"name": "Seed For Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let user = response.user;\r",
+									"\r",
+									"pm.environment.set(\"email_cliente\", user.email);\r",
+									"pm.environment.set(\"password\", user.password);\r",
+									"pm.environment.set(\"change_password_id\", user.id);\r",
+									"\r",
+									"console.log(\"Email del usuario:\", user.email);\r",
+									"console.log(\"Password del usuario:\", user.password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/seed/cliente",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"seed",
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar Sesión con el Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let token = pm.response.json().data.token;\r",
+									"pm.environment.set(\"token_cliente\", token);\r",
+									"console.log(\"Token del cliente guardado:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email_cliente}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar contraseña",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_cliente}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"oldPassword\": \"{{password}}\",\r\n  \"newPassword\": \"{{new_password}}\",\r\n  \"confirmPassword\": \"{{new_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/{{change_password_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"{{change_password_id}}"
 							]
 						}
 					},
